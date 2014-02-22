@@ -84,5 +84,16 @@ public class OutputServlet extends HttpServlet{
 	protected String loadName(){
 		return nameService.load();
 	}
+	
+	
+	// ************************************************************************************** //
+	// ****************************** GETTERS AND SETTERS *********************************** //
+	// ************************************************************************************** //
+	
+	
+	public void setNameService(NameService nameService) {
+		this.nameService = nameService;
+	}
+	
 
 }
