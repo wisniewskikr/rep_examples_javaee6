@@ -87,5 +87,20 @@ public class InputServlet extends HttpServlet{
 		response.sendRedirect("output.do?submit=Display");
 		
 	}
+	
+	
+	// ************************************************************************************** //
+	// ****************************** GETTERS AND SETTERS *********************************** //
+	// ************************************************************************************** //
+	
+	
+	public void setNameService(NameService nameService) {
+		this.nameService = nameService;
+	}
+
+	public void setInputValidator(InputValidator inputValidator) {
+		this.inputValidator = inputValidator;
+	}
+	
 
 }
