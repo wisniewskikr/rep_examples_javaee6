@@ -29,6 +29,11 @@
 				<server.username>${loc.server.username}</server.username>
 				<server.password>${loc.server.password}</server.password>
 				<server.path>/${project.artifactId}</server.path>
+				
+				<!-- Test intg data -->
+				<test.intg.port>${loc.test.intg.port}</test.intg.port>
+				<test.intg.path.host>http://localhost:${test.intg.port}/</test.intg.path.host>
+				<test.intg.path.context>${project.artifactId}</test.intg.path.context>
 			</properties>							
 		</profile>
 		
