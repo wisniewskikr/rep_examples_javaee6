@@ -33,20 +33,24 @@ public class GreeterTest {
      
     @Deployment
     public static WebArchive createDeployment() {
-        File[] lib = Maven.resolver()
+        File[] lib = Maven
+        		.resolver()
         		.loadPomFromFile("pom.xml")
         		.importDependencies(ScopeType.COMPILE)
                 .resolve()
                 .withTransitivity().as(File.class);
          
-        WebArchive war =  ShrinkWrap.create(WebArchive.class)
-        	.addPackages(true, "pl.kwi")
-            .addAsManifestResource("arquillian.xml")
-            .addAsLibraries(lib)
-            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+        WebArchive war =  ShrinkWrap
+        		.create(WebArchive.class, "test.war")
+        		.addPackages(true, "pl.kwi")
+        		.addAsManifestResource("arquillian.xml")
+        		.addAsLibraries(lib)
+        		.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         
-        war.merge(ShrinkWrap.create(GenericArchive.class).as(ExplodedImporter.class)  
-        	    .importDirectory(WEBAPP_SRC).as(GenericArchive.class),  
+        war.merge(ShrinkWrap.create(GenericArchive.class)
+        		.as(ExplodedImporter.class)  
+        	    .importDirectory(WEBAPP_SRC)
+        	    .as(GenericArchive.class),  
         	    "/", Filters.includeAll());  
          
         System.out.println(war.toString(true));
