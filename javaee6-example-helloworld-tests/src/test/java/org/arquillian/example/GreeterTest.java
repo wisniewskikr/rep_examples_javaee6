@@ -60,6 +60,8 @@ public class GreeterTest {
      
     @Test
     public void should_create_greeting() {
+    	
+    	System.out.println("---HERE");
         
     }
 }
