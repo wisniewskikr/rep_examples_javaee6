@@ -18,7 +18,7 @@ mvn clean install -Ploc,deploy
 Recommended usage of project:
 -----------------------------
 Browser url:
-http://localhost:8080/javaee6-example-helloworld
+http://localhost:8080/javaee6-example-helloworld-tests
 
 
 

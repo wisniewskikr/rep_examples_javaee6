@@ -148,7 +148,7 @@
 		
 		<!-- Tomcat Embedded -->
 		<profile>
-		    <id>arquillian-tomcat-embedded</id>
+		    <id>tomcatEmbedded</id>
 		    <activation>
 		        <activeByDefault>true</activeByDefault>
 		    </activation>
