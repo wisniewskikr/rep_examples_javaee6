@@ -9,7 +9,10 @@ import java.io.File;
 
 
 
+
+
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.GenericArchive;
@@ -20,6 +23,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
@@ -38,6 +42,10 @@ public class IntgTests {
 	
 	private InputIntgTestPage inputPage;
 	private OutputIntgTestPage outputPage;
+	
+	
+	@Drone
+	WebDriver driver;
 	
 	
     @Deployment
@@ -71,15 +79,21 @@ public class IntgTests {
 	@Before
 	public void setUp(){
 		
-		WebDriver driver = new FirefoxDriver();
-		Wait<WebDriver> wait = new WebDriverWait(driver, 10);		
-		
-		inputPage = new InputIntgTestPage(driver, wait);
-		outputPage = new OutputIntgTestPage(driver, wait);
+//		WebDriver driver = new FirefoxDriver();
+//		Wait<WebDriver> wait = new WebDriverWait(driver, 10);		
+//		
+//		inputPage = new InputIntgTestPage(driver, wait);
+//		outputPage = new OutputIntgTestPage(driver, wait);
 		
 	}
 	
 	@Test
+	public void tmp() {
+		System.out.println("---driver == null: " + (driver == null));
+	}
+	
+	@Test
+	@Ignore
 	public void typeNameToInputPageAndCheckOutputPage() {
 		
 		inputPage.initBrowserByUrl(PATH_HOST + PATH_CONTEXT);
@@ -99,6 +113,7 @@ public class IntgTests {
 	}
 	
 	@Test
+	@Ignore
 	public void typeNoNameToInputPage() {
 		
 		inputPage.initBrowserByUrl(PATH_HOST + PATH_CONTEXT);
