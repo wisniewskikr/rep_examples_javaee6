@@ -23,11 +23,9 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -48,7 +46,7 @@ public class IntgTests {
 	WebDriver driver;
 	
 	
-    @Deployment
+    @Deployment(testable = false)
     public static WebArchive createDeployment() {
         File[] lib = Maven
         		.resolver()
@@ -79,21 +77,14 @@ public class IntgTests {
 	@Before
 	public void setUp(){
 		
-//		WebDriver driver = new FirefoxDriver();
-//		Wait<WebDriver> wait = new WebDriverWait(driver, 10);		
-//		
-//		inputPage = new InputIntgTestPage(driver, wait);
-//		outputPage = new OutputIntgTestPage(driver, wait);
+		Wait<WebDriver> wait = new WebDriverWait(driver, 10);		
+		
+		inputPage = new InputIntgTestPage(driver, wait);
+		outputPage = new OutputIntgTestPage(driver, wait);
 		
 	}
 	
 	@Test
-	public void tmp() {
-		System.out.println("---driver == null: " + (driver == null));
-	}
-	
-	@Test
-	@Ignore
 	public void typeNameToInputPageAndCheckOutputPage() {
 		
 		inputPage.initBrowserByUrl(PATH_HOST + PATH_CONTEXT);
@@ -108,12 +99,9 @@ public class IntgTests {
 		
 		inputPage.checkIfPageLoaded();
 		
-		inputPage.closeBrowser();
-		
 	}
 	
 	@Test
-	@Ignore
 	public void typeNoNameToInputPage() {
 		
 		inputPage.initBrowserByUrl(PATH_HOST + PATH_CONTEXT);
@@ -124,8 +112,6 @@ public class IntgTests {
 		
 		inputPage.checkIfPageLoaded();
 		inputPage.checkTextInFieldById("name.errors", "Please fill this field");
-		
-		inputPage.closeBrowser();
 		
 	}
 	
