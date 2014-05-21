@@ -46,7 +46,10 @@ public class IntgTests {
 	WebDriver driver;
 	
 	
-    @Deployment(testable = false)
+    // ATTENTION!!!
+	// Parameter "testable = false" is very important and 
+	// makes that @Drone is not null
+	@Deployment(testable = false)
     public static WebArchive createDeployment() {
         File[] lib = Maven
         		.resolver()
@@ -68,7 +71,7 @@ public class IntgTests {
         	    .as(GenericArchive.class),  
         	    "/", Filters.includeAll());  
          
-        System.out.println(war.toString(true));
+//        System.out.println(war.toString(true));
          
         return war;
     }
