@@ -1,7 +1,8 @@
 DESCRIPTION
 ===========
 
-This is example project basing on servlets in version 3 (with annotations). 
+This is example project basing on java ee in version 6. Injection in Tomcat 6, which is not java ee 6 server,
+is handled by weld library. 
 It shows example implementation of CRUD database actions: create, read, update
 and delete entities from database. This project consists of following pages:
 - table page		: all entities of user from database all displayed here;
@@ -24,7 +25,7 @@ mvn clean install -Ploc,deploy
 Recommended usage of project:
 -----------------------------
 Browser url:
-http://localhost:8080/servlets-example-crud
+http://localhost:8080/javaee6-example-crud
 
 
 
@@ -115,4 +116,4 @@ USAGE
 
 Type in browser:
 
-http://localhost:8080/servlets-example-crud
+http://localhost:8080/javaee6-example-crud
