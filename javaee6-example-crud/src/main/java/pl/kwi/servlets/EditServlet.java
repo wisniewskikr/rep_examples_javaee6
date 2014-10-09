@@ -3,6 +3,7 @@ package pl.kwi.servlets;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,13 +20,12 @@ public class EditServlet extends HttpServlet{
 	
 	
 	private static final long serialVersionUID = 1L;
-	private UserService userService;
-	private EditValidator editValidator;
 	
-	public EditServlet(){
-		userService = new UserService();
-		editValidator = new EditValidator();
-	}
+	@Inject
+	private UserService userService;
+	
+	@Inject
+	private EditValidator editValidator;
 	
 
 	@Override

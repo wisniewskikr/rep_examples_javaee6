@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,16 +21,14 @@ public class TableServlet extends HttpServlet{
 	
 	
 	private static final long serialVersionUID = 1L;
+	
+	@Inject
 	private UserService userService;
+	
+	@Inject
 	private TableValidator validator;
 	
 	
-	public TableServlet(){
-		userService = new UserService();
-		validator = new TableValidator();
-	}
-	
-
 	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {

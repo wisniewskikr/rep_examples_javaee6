@@ -90,16 +90,7 @@
                     <target>${java-version}</target>
 				</configuration>
 			</plugin>
-			
-			<!-- Pluging removing web.xml file -->
-            <plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-war-plugin</artifactId>
-		        <configuration>
-		          <failOnMissingWebXml>false</failOnMissingWebXml>
-		        </configuration>
-		      </plugin>
-						
+									
 			<!-- Plugin for reading properties from
 			external file -->
 			<plugin>
@@ -227,12 +218,11 @@
 			<version>3.0</version>
 		</dependency>
 		
-		<!-- Servlets dependencies -->
+		<!-- Weld -->
 		<dependency>
-		    <groupId>javax</groupId>
-		    <artifactId>javaee-api</artifactId>
-		    <version>6.0</version>
-		    <scope>provided</scope>
+			<groupId>org.jboss.weld.servlet</groupId>
+			<artifactId>weld-servlet</artifactId>
+			<version>2.1.0.Final</version>
 		</dependency>
 				
 	</dependencies>

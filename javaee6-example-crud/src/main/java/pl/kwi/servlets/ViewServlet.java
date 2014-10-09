@@ -2,6 +2,7 @@ package pl.kwi.servlets;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,11 +18,9 @@ public class ViewServlet extends HttpServlet{
 	
 	
 	private static final long serialVersionUID = 1L;
-	private UserService userService;
 	
-	public ViewServlet(){
-		userService = new UserService();
-	}
+	@Inject
+	private UserService userService;
 	
 
 	@Override
