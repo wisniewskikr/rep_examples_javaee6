@@ -2,6 +2,7 @@ package pl.kwi.servlets;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,12 +18,9 @@ public class DeleteServlet extends HttpServlet{
 	
 	
 	private static final long serialVersionUID = 1L;
+	
+	@Inject
 	private UserService userService;
-	
-	
-	public DeleteServlet(){
-		userService = new UserService();
-	}
 	
 
 	@Override
