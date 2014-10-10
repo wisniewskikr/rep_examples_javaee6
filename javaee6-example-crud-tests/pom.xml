@@ -1,0 +1,471 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>pl.kwi</groupId>
+	<artifactId>javaee6-example-crud-tests</artifactId>
+	<packaging>war</packaging>
+	<version>2.0</version>
+	
+	
+	<properties>
+        <java-version>1.6</java-version>
+        <project.properties.file>project.properties</project.properties.file>
+		
+		<hibernate.version>4.1.7.Final</hibernate.version>
+		<hibernate.validator.version>4.3.0.Final</hibernate.validator.version>
+	</properties>
+	
+	
+	<profiles>
+	
+		<!-- Profile 'loc' (abbreviation for 'local'): location profile. 
+		Indicates local computer as a place for task profiles. -->
+		<profile>
+			<id>loc</id>
+			<activation>
+	            <activeByDefault>true</activeByDefault>
+	        </activation>			
+			<properties>
+				<!-- Local server -->
+				<server.url>${loc.server.url}</server.url>
+				<server.username>${loc.server.username}</server.username>
+				<server.password>${loc.server.password}</server.password>
+				<server.path>/${project.artifactId}</server.path>
+				
+				<!-- Local main DB -->
+				<main.db.unit.persistence-unit.name>${loc.main.db.unit.persistence-unit.name}</main.db.unit.persistence-unit.name>
+				<main.db.url>${loc.main.db.url}</main.db.url>
+				<main.db.driver>${loc.main.db.driver}</main.db.driver>
+				<main.db.username>${loc.main.db.username}</main.db.username>
+				<main.db.password>${loc.main.db.password}</main.db.password>
+				
+				<!-- Local test DB unit -->
+				<test.db.unit.persistence-unit.name>${loc.test.db.unit.persistence-unit.name}</test.db.unit.persistence-unit.name>
+				<test.db.unit.url>${loc.test.db.unit.url}</test.db.unit.url>
+				<test.db.unit.driver>${loc.test.db.unit.driver}</test.db.unit.driver>
+				<test.db.unit.username>${loc.test.db.unit.username}</test.db.unit.username>
+				<test.db.unit.password>${loc.test.db.unit.password}</test.db.unit.password>
+				
+				<!-- Local test DB intg -->
+				<test.db.intg.persistence-unit.name>${loc.test.db.intg.persistence-unit.name}</test.db.intg.persistence-unit.name>
+				<test.db.intg.url>${loc.test.db.intg.url}</test.db.intg.url>
+				<test.db.intg.driver>${loc.test.db.intg.driver}</test.db.intg.driver>
+				<test.db.intg.username>${loc.test.db.intg.username}</test.db.intg.username>
+				<test.db.intg.password>${loc.test.db.intg.password}</test.db.intg.password>
+			</properties>							
+		</profile>
+		
+		<!-- Profile 'deploy': task profile.
+		Deploys project on computer indicated by location profile. -->
+		<profile>
+			<id>deploy</id>									
+			<build>
+				<plugins>
+					<!-- Unit tests -->
+					<plugin>
+			            <groupId>org.apache.maven.plugins</groupId>
+			            <artifactId>maven-surefire-plugin</artifactId>
+			            <configuration>			            	
+			                <skip>true</skip>			                
+			            </configuration>
+			        </plugin> 					
+					<plugin>
+				        <groupId>org.apache.tomcat.maven</groupId>
+		          		<artifactId>tomcat7-maven-plugin</artifactId>
+		          		<version>2.0</version>
+				        <executions>
+				        	<execution>
+				        		<phase>pre-integration-test</phase>
+				        		<goals>
+				        			<goal>deploy</goal>
+				        		</goals>
+				        	</execution>
+				        </executions>
+				        <configuration>
+				        	<url>${server.url}</url>
+				        	<username>${server.username}</username>
+		          			<password>${server.password}</password>
+		          			<path>${server.path}</path>
+                            <update>true</update>
+				        </configuration>
+				      </plugin>			          
+				</plugins>
+			</build>						
+		</profile>
+		
+		<!-- Profile 'unit': task profile.
+		Runs unit tests. -->
+		<profile>
+			<id>unit</id>
+			<activation>
+	            <activeByDefault>true</activeByDefault>
+	        </activation>
+	        <properties>
+	        	<test.db.persistence-unit.name>${test.db.unit.persistence-unit.name}</test.db.persistence-unit.name>
+	            <test.db.url>${test.db.unit.url}</test.db.url>
+	            <test.db.driver>${test.db.unit.driver}</test.db.driver>
+	            <test.db.username>${test.db.unit.username}</test.db.username>
+	            <test.db.password>${test.db.unit.password}</test.db.password>
+	        </properties>
+			<build>
+				<plugins>
+					<!-- Unit tests -->
+					<plugin>
+			            <groupId>org.apache.maven.plugins</groupId>
+			            <artifactId>maven-surefire-plugin</artifactId>
+			            <configuration>			            	
+			                <skip>true</skip>			                
+			            </configuration>
+			            <executions>
+					       <execution>
+					          <id>unit-tests</id>
+					          <phase>test</phase>
+					          <goals>
+					             <goal>test</goal>
+					          </goals>
+					          <configuration>			            	
+			                	<skip>false</skip>
+			                	<systemPropertyVariables>
+									<test.db.persistence-unit.name>${test.db.persistence-unit.name}</test.db.persistence-unit.name>
+						            <test.db.url>${test.db.url}</test.db.url>
+						            <test.db.driver>${test.db.driver}</test.db.driver>
+						            <test.db.username>${test.db.username}</test.db.username>
+						            <test.db.password>${test.db.password}</test.db.password>
+						        </systemPropertyVariables>
+			                	<includes>
+            						<include>**/*Test.java</include>
+            					</includes>
+			                	<excludes>
+                					<exclude>**/IntgTests.java</exclude>
+            					</excludes>			                
+			            	  </configuration>
+					        </execution>					        
+					     </executions>			              
+			        </plugin>			        
+				</plugins>
+			</build>			
+		</profile>
+		
+		<!-- Profile 'intg' (abbreviation for 'integration'): task profile.
+		Runs integration tests. -->
+		<profile>
+			<id>intg</id>
+			<activation>
+	            <activeByDefault>true</activeByDefault>
+	        </activation>
+			<properties>
+				<!-- Test intg data -->
+				<test.intg.port>${loc.test.intg.port}</test.intg.port>
+				<test.intg.path.host>http://localhost:${test.intg.port}/</test.intg.path.host>
+				<test.intg.path.context>${project.artifactId}</test.intg.path.context>
+				
+	            <test.db.persistence-unit.name>${test.db.intg.persistence-unit.name}</test.db.persistence-unit.name>
+	            <test.db.url>${test.db.intg.url}</test.db.url>
+	            <test.db.driver>${test.db.intg.driver}</test.db.driver>
+	            <test.db.username>${test.db.intg.username}</test.db.username>
+	            <test.db.password>${test.db.intg.password}</test.db.password>
+			</properties>			
+			<build>
+				<plugins>
+					<!-- Integration tests -->
+					<plugin>
+			            <groupId>org.apache.maven.plugins</groupId>
+			            <artifactId>maven-surefire-plugin</artifactId>
+			            <configuration>			            	
+			                <skip>true</skip>			                 			                
+			            </configuration>
+			            <executions>
+					        <execution>
+					          <id>integration-tests</id>
+					          <phase>test</phase>
+					          <goals>
+					             <goal>test</goal>
+					          </goals>
+					          <configuration>			            	
+			                	<skip>false</skip>
+			                	<systemPropertyVariables>
+						            <test.intg.path.host>${test.intg.path.host}</test.intg.path.host>
+						            <test.intg.path.context>${test.intg.path.context}</test.intg.path.context>
+						            
+						            <test.db.persistence-unit.name>${test.db.persistence-unit.name}</test.db.persistence-unit.name>
+						            <test.db.url>${test.db.url}</test.db.url>
+						            <test.db.driver>${test.db.driver}</test.db.driver>
+						            <test.db.username>${test.db.username}</test.db.username>
+						            <test.db.password>${test.db.password}</test.db.password>
+						          </systemPropertyVariables>			                	
+            					<includes>
+            						<include>**/IntgTests.java</include>
+            					</includes>
+            					<excludes>
+                					<exclude>**/*Test.java</exclude>
+            					</excludes>			                
+			            	  </configuration>
+					        </execution>
+					     </executions>			              
+			        </plugin>			        
+				</plugins>
+			</build>
+		</profile>
+	
+	</profiles>
+	
+	
+	<build>
+		<finalName>${artifactId}</finalName>
+		
+		<resources>
+			<resource>
+				<directory>src/main/resources/</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources/</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+		
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${java-version}</source>
+                    <target>${java-version}</target>
+				</configuration>
+			</plugin>
+			
+			<!-- Pluging removing web.xml file -->
+            <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-war-plugin</artifactId>
+		        <configuration>
+		          <failOnMissingWebXml>false</failOnMissingWebXml>
+		        </configuration>
+		      </plugin>
+						
+			<!-- Plugin for reading properties from
+			external file -->
+			<plugin>
+		        <groupId>org.codehaus.mojo</groupId>
+		        <artifactId>properties-maven-plugin</artifactId>
+		        <version>1.0-alpha-2</version>
+		        <executions>
+		          <execution>
+		          	<id>read-properties</id>
+		            <phase>initialize</phase>
+		            <goals>
+		              <goal>read-project-properties</goal>
+		            </goals>
+		            <configuration>
+		              <files>
+		                <file>${project.properties.file}</file>
+		              </files>
+		            </configuration>
+		          </execution>
+		          
+		           <execution>
+		           		<id>set-properties</id>
+		           		<phase>initialize</phase>
+			            <goals>
+			                <goal>set-system-properties</goal>
+			            </goals>
+			            <configuration>
+			                <properties>
+			                    <property>
+			                        <name>main.db.unit.persistence-unit.name</name>
+			                        <value>${main.db.unit.persistence-unit.name}</value>
+			                    </property>
+			                </properties>
+			            </configuration>
+			        </execution>
+		        
+		        </executions>
+		      </plugin>
+		      
+		</plugins>
+		
+		<pluginManagement>
+        	<plugins>
+        		<!-- This plugin removes Exlipse errors.
+        		This plugin's configuration is used to store Eclipse m2e settings only. 
+        		It has no influence on the Maven build itself.-->
+        		<plugin>
+        			<groupId>org.eclipse.m2e</groupId>
+        			<artifactId>lifecycle-mapping</artifactId>
+        			<version>1.0.0</version>
+        			<configuration>
+        				<lifecycleMappingMetadata>
+        					<pluginExecutions>
+        						<pluginExecution>
+        							<pluginExecutionFilter>
+        								<groupId>
+        									org.codehaus.mojo
+        								</groupId>
+        								<artifactId>
+        									properties-maven-plugin
+        								</artifactId>
+        								<versionRange>
+        									[1.0-alpha-2,)
+        								</versionRange>
+        								<goals>
+        									<goal>
+        										read-project-properties
+        									</goal>
+        									<goal>
+        										set-system-properties
+        									</goal>
+        								</goals>
+        							</pluginExecutionFilter>
+        							<action>
+        								<ignore></ignore>
+        							</action>
+        						</pluginExecution>
+        					</pluginExecutions>
+        				</lifecycleMappingMetadata>
+        			</configuration>
+        		</plugin>
+        	</plugins>
+        </pluginManagement>
+	</build>
+
+
+	<dependencies>
+		
+		<!-- Servlet 3.0 API -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+		
+		<!-- JSP libraries -->
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+		
+		<!-- Log libraries -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.4.2</version>
+		</dependency>
+		
+		<!-- Hibernate dependencies -->
+		<!-- Set as "provided" for JBoss - there is it own hibernate -->
+		 <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		    <version>${hibernate.validator.version}</version>
+		</dependency>
+						
+		<!-- Data base libraries -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.18</version>
+		</dependency>
+		
+		<!-- Commons dependencies with for instance
+		StringUtils -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.0</version>
+		</dependency>
+		
+		<!-- Unit tests dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.8.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.4.8</version>
+		</dependency>
+		
+		<!-- Dependencies with Embedded Tomcat -->
+		<dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-embedded-7</artifactId>
+            <version>1.0.0.CR5</version>
+            <scope>test</scope>		           
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>7.0.42</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>7.0.42</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-logging-juli</artifactId>
+            <version>7.0.42</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jdt.core.compiler</groupId>
+            <artifactId>ecj</artifactId>
+            <version>3.7</version>
+            <scope>provided</scope>
+        </dependency>
+		
+		<!-- Integration tests dependencies - 
+		Arquillian common dependencies -->
+		<dependency>
+		    <groupId>org.jboss.arquillian.junit</groupId>
+		    <artifactId>arquillian-junit-container</artifactId>
+		    <version>1.0.3.Final</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+    		<groupId>org.jboss.shrinkwrap.resolver</groupId>
+    		<artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+    		<version>1.1.0-alpha-1</version>
+    		<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.39.0</version>
+			<scope>test</scope>
+		</dependency>
+				
+	</dependencies>
+
+</project>
