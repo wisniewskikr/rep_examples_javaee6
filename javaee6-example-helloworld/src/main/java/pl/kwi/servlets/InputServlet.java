@@ -1,13 +1,10 @@
 package pl.kwi.servlets;
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -18,12 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import com.sun.jersey.api.container.httpserver.HttpServerFactory;
-
 import pl.kwi.services.NameService;
-import pl.kwi.validators.InputValidator;
 
 
 /**
@@ -35,11 +27,17 @@ import pl.kwi.validators.InputValidator;
 @Path("input")
 public class InputServlet {
 
+	
 	@Inject
 	private NameService nameService;
 	
 //	@Inject
 //	private InputValidator inputValidator;
+	
+	
+	public InputServlet() {
+		nameService = new NameService();
+	}
 	
 	/**
 	 * Method displays page *.jsp with input.
@@ -70,8 +68,8 @@ public class InputServlet {
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.TEXT_HTML)
-	private void handleOkButton(@FormParam("name") String name, @Context HttpServletResponse response) throws IOException {
+	@Produces
+	public void handleOkButton(@FormParam("name") String name, @Context HttpServletResponse response) throws IOException {
 					
 //		Map<String, String> errorMessages = inputValidator.getErrorMessages(request);
 //		if(!errorMessages.isEmpty()) {			
@@ -81,7 +79,6 @@ public class InputServlet {
 //		
 //		String name = request.getParameter("name");	
 		
-		System.out.println("---name: " + name);
 		nameService.save(name);
 		response.sendRedirect("output");
 		

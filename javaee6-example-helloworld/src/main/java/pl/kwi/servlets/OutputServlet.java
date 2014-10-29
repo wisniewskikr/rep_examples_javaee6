@@ -5,14 +5,12 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -29,8 +27,14 @@ import pl.kwi.services.NameService;
 @Path("output")
 public class OutputServlet {
 
+	
 	@Inject
 	private NameService nameService;
+	
+	
+	public OutputServlet() {
+		nameService = new NameService();
+	}
 	
 	/**
 	 * Method displays page *.jsp with output.
@@ -47,7 +51,8 @@ public class OutputServlet {
 	public void displayPage(@Context HttpServletRequest request,@Context HttpServletResponse response) throws ServletException, IOException{
 			
 		request.setAttribute("name", loadName());
-		response.sendRedirect("pages/outputJsp.jsp");
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("../pages/outputJsp.jsp");
+		requestDispatcher.forward(request, response);
 		
 	}
 	
@@ -59,11 +64,11 @@ public class OutputServlet {
 	 * @throws IOException
 	 * @throws ServletException
 	 */
-	@GET
-	@Path("{action}")
-	@Consumes
-	@Produces(MediaType.TEXT_HTML)
-	public void handleBackButton(@Context HttpServletResponse response, @PathParam("action")String action) throws ServletException, IOException{
+	@POST
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces
+	public void handleBackButton(@Context HttpServletResponse response) throws ServletException, IOException{
 		
 		response.sendRedirect("input");
 		

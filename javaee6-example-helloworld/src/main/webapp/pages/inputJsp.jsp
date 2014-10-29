@@ -9,16 +9,16 @@
 
 <head>
 	<title>Hello World - Input</title>
-	<link type="text/css" rel="stylesheet" href="css/style.css">
-	<link type="text/css" rel="stylesheet" href="css/jquery-ui-1.10.3/smoothness/jquery-ui-1.10.3.custom.css">
-	<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
-	<script type="text/javascript" src="js/jquery-ui-1.10.3.custom.js"></script>
-	<script type="text/javascript" src="js/script.js"></script>	
+	<link type="text/css" rel="stylesheet" href="../css/style.css">
+	<link type="text/css" rel="stylesheet" href="../css/jquery-ui-1.10.3/smoothness/jquery-ui-1.10.3.custom.css">
+	<script type="text/javascript" src="../js/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="../js/jquery-ui-1.10.3.custom.js"></script>
+	<script type="text/javascript" src="../js/script.js"></script>	
 </head>
 
 
 <body>
-<form method="get" action="">
+<form method="post" action="">
 
 	<div class="page">
 		<div id="title" class="title"><h2>Hello World</h2></div>
