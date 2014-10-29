@@ -10,6 +10,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 
 import pl.kwi.services.NameService;
 import pl.kwi.validators.InputValidator;
@@ -21,47 +32,29 @@ import pl.kwi.validators.InputValidator;
  * @author Krzysztof Wisniewski
  *
  */
-@WebServlet(value="/input.do")
-public class InputServlet extends HttpServlet{
+@Path("input")
+public class InputServlet {
 
-	private static final long serialVersionUID = 1L;
-	
 	@Inject
 	private NameService nameService;
 	
-	@Inject
-	private InputValidator inputValidator;
-	
-	/* (non-Javadoc)
-	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	 */
-	@Override
-	public void service(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
-				
-		String submit = request.getParameter("submit");
-		
-		if("Display".equals(submit)) {
-			displayPage(request, response);
-		} else if("OK".equals(submit)) {
-			handleOkButton(request, response);
-		} else {
-			throw new ServletException("No handling of action: " + submit);
-		}
-			
-	}
+//	@Inject
+//	private InputValidator inputValidator;
 	
 	/**
 	 * Method displays page *.jsp with input.
 	 * 
-	 * @param request object <code>HttpServletRequest</code> with request from browser
 	 * @param response object <code>HttpServletResponse</code> with response to browser
-	 * @throws ServletException
 	 * @throws IOException
+	 * @throws ServletException 
 	 */
-	private void displayPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+	@GET
+	@Path("/")
+	@Consumes
+	@Produces(MediaType.TEXT_HTML)
+	public void displayPage(@Context HttpServletResponse response, @Context HttpServletRequest request) throws IOException, ServletException {
 		
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/inputJsp.jsp");
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("../pages/inputJsp.jsp");
 		requestDispatcher.forward(request, response);
 		
 	}
@@ -74,17 +67,23 @@ public class InputServlet extends HttpServlet{
 	 * @throws IOException
 	 * @throws ServletException
 	 */
-	private void handleOkButton(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+	@POST
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.TEXT_HTML)
+	private void handleOkButton(@FormParam("name") String name, @Context HttpServletResponse response) throws IOException {
 					
-		Map<String, String> errorMessages = inputValidator.getErrorMessages(request);
-		if(!errorMessages.isEmpty()) {			
-			displayPage(request, response);
-			return;
-		}
+//		Map<String, String> errorMessages = inputValidator.getErrorMessages(request);
+//		if(!errorMessages.isEmpty()) {			
+//			displayPage(request, response);
+//			return;
+//		}
+//		
+//		String name = request.getParameter("name");	
 		
-		String name = request.getParameter("name");	
+		System.out.println("---name: " + name);
 		nameService.save(name);
-		response.sendRedirect("output.do?submit=Display");
+		response.sendRedirect("output");
 		
 	}
 	
@@ -98,9 +97,9 @@ public class InputServlet extends HttpServlet{
 		this.nameService = nameService;
 	}
 
-	public void setInputValidator(InputValidator inputValidator) {
-		this.inputValidator = inputValidator;
-	}
+//	public void setInputValidator(InputValidator inputValidator) {
+//		this.inputValidator = inputValidator;
+//	}
 	
 
 }

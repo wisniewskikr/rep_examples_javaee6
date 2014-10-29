@@ -9,6 +9,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 
 import pl.kwi.services.NameService;
 
@@ -19,32 +26,11 @@ import pl.kwi.services.NameService;
  * @author Krzysztof Wisniewski
  *
  */
-@WebServlet(value="/output.do")
-public class OutputServlet extends HttpServlet{
+@Path("output")
+public class OutputServlet {
 
-	private static final long serialVersionUID = 1L;
-	
 	@Inject
 	private NameService nameService;
-	
-	/* (non-Javadoc)
-	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	 */
-	@Override
-	public void service(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
-					
-		String submit = request.getParameter("submit");
-		
-		if("Display".equals(submit)) {
-			displayPage(request, response);
-		} else if("Back".equals(submit)) {
-			handleBackButton(request, response);
-		} else {
-			throw new ServletException("No handling of action: " + submit);
-		}
-				
-	}
 	
 	/**
 	 * Method displays page *.jsp with output.
@@ -54,11 +40,14 @@ public class OutputServlet extends HttpServlet{
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	private void displayPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+	@GET
+	@Path("/")
+	@Consumes
+	@Produces(MediaType.TEXT_HTML)
+	public void displayPage(@Context HttpServletRequest request,@Context HttpServletResponse response) throws ServletException, IOException{
 			
 		request.setAttribute("name", loadName());
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("pages/outputJsp.jsp");
-		requestDispatcher.forward(request, response);
+		response.sendRedirect("pages/outputJsp.jsp");
 		
 	}
 	
@@ -70,9 +59,13 @@ public class OutputServlet extends HttpServlet{
 	 * @throws IOException
 	 * @throws ServletException
 	 */
-	private void handleBackButton(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+	@GET
+	@Path("{action}")
+	@Consumes
+	@Produces(MediaType.TEXT_HTML)
+	public void handleBackButton(@Context HttpServletResponse response, @PathParam("action")String action) throws ServletException, IOException{
 		
-		response.sendRedirect("input.do?submit=Display");
+		response.sendRedirect("input");
 		
 	}
 	
