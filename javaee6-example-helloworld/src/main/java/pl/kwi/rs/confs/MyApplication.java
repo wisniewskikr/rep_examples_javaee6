@@ -7,7 +7,7 @@ public class MyApplication extends ResourceConfig {
 	
 	public MyApplication() {
 		register(new MyApplicationBinder());
-        packages(true, "pl.kwi");
+        packages(true, "pl.kwi.rests");
     }
 
 }
