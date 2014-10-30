@@ -19,7 +19,7 @@ import pl.kwi.services.NameService;
 
 
 /**
- * Class of Servlet handles requests from "Output" jsp page. 
+ * Class of Rest handles requests from "Output" jsp page. 
  * 
  * @author Krzysztof Wisniewski
  *

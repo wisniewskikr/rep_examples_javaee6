@@ -1,14 +1,23 @@
 DESCRIPTION
 ===========
 
-This is example project built by using Java EE 6. It consists of two pages:
+This is example project built by using Rest and Java EE 6. It consists of two pages:
 - input page		: here you can type your name;
 - output page		: here your name is displayed after text "Hello World"
 
-This project shows how to use Java EE 6 together with:
+This project shows how to use Rest and Java EE 6 together with:
 - java script;
 - css;
 - validation.
+
+To use CDI in Rest you have to:
+- in web.xml add
+<init-param>
+	<param-name>javax.ws.rs.Application</param-name>
+    <param-value>pl.kwi.rest.confs.MyApplication</param-value>
+</init-param>
+- add class pl.kwi.rest.confs.MyApplication;
+- add class pl.kwi.rest.confs.MyApplicationBinder.    	
 
 Recommended deployment of project:
 ----------------------------------

@@ -22,7 +22,7 @@ import pl.kwi.validators.InputValidator;
 
 
 /**
- * Class of Servlet handles requests from "Input" jsp page. 
+ * Class of Rest handles requests from "Input" jsp page. 
  * 
  * @author Krzysztof Wisniewski
  *
@@ -40,7 +40,8 @@ public class InputRest {
 	
 	/**
 	 * Method displays page *.jsp with input.
-	 * 
+	 *
+	 * @param request object <code>HttpServletRequest</code> with request from browser* 
 	 * @param response object <code>HttpServletResponse</code> with response to browser
 	 * @throws IOException
 	 * @throws ServletException 
@@ -59,6 +60,7 @@ public class InputRest {
 	/**
 	 * Method handles pressing button "Ok" on "Input" jsp page.
 	 * 
+	 * @param name object <code>String</code> with value of name from form
 	 * @param request object <code>HttpServletRequest</code> with request from browser
 	 * @param response object <code>HttpServletResponse</code> with response to browser
 	 * @throws IOException
