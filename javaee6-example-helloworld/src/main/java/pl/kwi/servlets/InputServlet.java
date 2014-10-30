@@ -28,16 +28,12 @@ import pl.kwi.services.NameService;
 public class InputServlet {
 
 	
-//	@Inject
+	@Inject
 	private NameService nameService;
 	
 //	@Inject
 //	private InputValidator inputValidator;
-	
-	
-	public InputServlet() {
-		nameService = new NameService();
-	}
+
 	
 	/**
 	 * Method displays page *.jsp with input.

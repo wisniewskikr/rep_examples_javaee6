@@ -28,13 +28,9 @@ import pl.kwi.services.NameService;
 public class OutputServlet {
 
 	
-//	@Inject
+	@Inject
 	private NameService nameService;
-	
-	
-	public OutputServlet() {
-		nameService = new NameService();
-	}
+
 	
 	/**
 	 * Method displays page *.jsp with output.
