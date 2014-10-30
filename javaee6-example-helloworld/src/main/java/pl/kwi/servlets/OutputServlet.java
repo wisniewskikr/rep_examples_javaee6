@@ -28,7 +28,7 @@ import pl.kwi.services.NameService;
 public class OutputServlet {
 
 	
-	@Inject
+//	@Inject
 	private NameService nameService;
 	
 	
