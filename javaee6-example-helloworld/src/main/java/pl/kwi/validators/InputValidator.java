@@ -22,11 +22,10 @@ public class InputValidator {
 	 * @param request object <code>HttpServletRequest</code> with request from browser
 	 * @return object <code>Map</code> with error field name and error message
 	 */
-	public Map<String, String> getErrorMessages(HttpServletRequest request) {
+	public Map<String, String> getErrorMessages(HttpServletRequest request, String name) {
 		
 		Map<String, String> errorMessages = new HashMap<String, String>();
 		
-		String name = request.getParameter("name");
 		if(StringUtils.isBlank(name)) {
 			errorMessages.put("name", "Please fill this field");
 		}

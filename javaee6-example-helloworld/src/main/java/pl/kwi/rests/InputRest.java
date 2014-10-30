@@ -1,6 +1,7 @@
 package pl.kwi.rests;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
@@ -15,7 +16,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
 import pl.kwi.services.NameService;
+import pl.kwi.validators.InputValidator;
 
 
 /**
@@ -31,8 +34,8 @@ public class InputRest {
 	@Inject
 	private NameService nameService;
 	
-//	@Inject
-//	private InputValidator inputValidator;
+	@Inject
+	private InputValidator inputValidator;
 
 	
 	/**
@@ -46,7 +49,7 @@ public class InputRest {
 	@Path("/")
 	@Consumes
 	@Produces(MediaType.TEXT_HTML)
-	public void displayPage(@Context HttpServletResponse response, @Context HttpServletRequest request) throws IOException, ServletException {
+	public void displayPage(@Context HttpServletRequest request, @Context HttpServletResponse response) throws IOException, ServletException {
 		
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("../pages/inputJsp.jsp");
 		requestDispatcher.forward(request, response);
@@ -65,15 +68,13 @@ public class InputRest {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces
-	public void handleOkButton(@FormParam("name") String name, @Context HttpServletResponse response) throws IOException {
+	public void handleOkButton(@FormParam("name") String name, @Context HttpServletRequest request, @Context HttpServletResponse response) throws IOException, ServletException {
 					
-//		Map<String, String> errorMessages = inputValidator.getErrorMessages(request);
-//		if(!errorMessages.isEmpty()) {			
-//			displayPage(request, response);
-//			return;
-//		}
-//		
-//		String name = request.getParameter("name");	
+		Map<String, String> errorMessages = inputValidator.getErrorMessages(request, name);
+		if(!errorMessages.isEmpty()) {			
+			displayPage(request, response);
+			return;
+		}
 		
 		nameService.save(name);
 		response.sendRedirect("output");
@@ -90,9 +91,9 @@ public class InputRest {
 		this.nameService = nameService;
 	}
 
-//	public void setInputValidator(InputValidator inputValidator) {
-//		this.inputValidator = inputValidator;
-//	}
+	public void setInputValidator(InputValidator inputValidator) {
+		this.inputValidator = inputValidator;
+	}
 	
 
 }
