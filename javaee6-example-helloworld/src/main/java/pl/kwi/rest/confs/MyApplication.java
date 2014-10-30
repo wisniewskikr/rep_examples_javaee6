@@ -1,4 +1,4 @@
-package pl.kwi.rs.confs;
+package pl.kwi.rest.confs;
 
 
 import org.glassfish.jersey.server.ResourceConfig;
